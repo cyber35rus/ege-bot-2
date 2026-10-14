@@ -196,6 +196,7 @@ async def fake_pay(
     message: Message,
     command: CommandObject,
     session: AsyncSession,
+    user: User,
 ):
     if not admin_only(message):
         return
@@ -209,11 +210,10 @@ async def fake_pay(
 
     from services.subscription import extend_subscription
     from models import Payment
-    from datetime import datetime
 
-    await extend_subscription(session, message.from_user, days)
+    await extend_subscription(session, user, days)
     session.add(Payment(
-        user_id=message.from_user.id,
+        user_id=user.id,
         stars_amount=0,
         payload=f"fake:{days}",
         telegram_charge_id=None,
@@ -221,10 +221,7 @@ async def fake_pay(
     ))
     await session.commit()
 
-    until = message.from_user.username  # noqa
-    user = await session.get(User, message.from_user.id)
     until_str = user.subscription_until.strftime("%d.%m.%Y") if user.subscription_until else "—"
-
     await message.answer(
         f"✅ Fake-оплата на {days} дней.\n"
         f"Подписка активна до <b>{until_str}</b>."
