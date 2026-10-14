@@ -189,3 +189,43 @@ async def admin_reply(message: Message):
         await message.answer("✅ Отправлено")
     except Exception as e:
         await message.answer(f"⚠️ Не доставлено: {e}")
+
+
+@router.message(Command("fake_pay"))
+async def fake_pay(
+    message: Message,
+    command: CommandObject,
+    session: AsyncSession,
+):
+    if not admin_only(message):
+        return
+    days = 30
+    if command.args:
+        try:
+            days = int(command.args.strip())
+        except ValueError:
+            await message.answer("Использование: /fake_pay [дней] (по умолчанию 30)")
+            return
+
+    from services.subscription import extend_subscription
+    from models import Payment
+    from datetime import datetime
+
+    await extend_subscription(session, message.from_user, days)
+    session.add(Payment(
+        user_id=message.from_user.id,
+        stars_amount=0,
+        payload=f"fake:{days}",
+        telegram_charge_id=None,
+        status="succeeded",
+    ))
+    await session.commit()
+
+    until = message.from_user.username  # noqa
+    user = await session.get(User, message.from_user.id)
+    until_str = user.subscription_until.strftime("%d.%m.%Y") if user.subscription_until else "—"
+
+    await message.answer(
+        f"✅ Fake-оплата на {days} дней.\n"
+        f"Подписка активна до <b>{until_str}</b>."
+    )
