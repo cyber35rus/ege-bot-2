@@ -1,0 +1,82 @@
+[
+  {
+    "subject": "math",
+    "topic": "Квадратные уравнения",
+    "exam_type": "ege",
+    "task_text": "Решите уравнение x² − 5x + 6 = 0. В ответе укажите больший корень.",
+    "options": ["1", "2", "3", "6"],
+    "correct_option": 2,
+    "explanation": "D = 25 − 24 = 1. Корни: x = (5 ± 1)/2 → 2 и 3. Больший — 3.",
+    "difficulty": 1
+  },
+  {
+    "subject": "math",
+    "topic": "Логарифмы",
+    "exam_type": "ege",
+    "task_text": "Найдите значение выражения log₂ 8 + log₂ 4.",
+    "options": ["3", "5", "6", "12"],
+    "correct_option": 1,
+    "explanation": "log₂ 8 = 3, log₂ 4 = 2, сумма = 5.",
+    "difficulty": 1
+  },
+  {
+    "subject": "math",
+    "topic": "Производная",
+    "exam_type": "ege",
+    "task_text": "Найдите производную функции f(x) = x³ − 3x.",
+    "options": ["3x² − 3", "x² − 3", "3x² − 3x", "3x² + 3"],
+    "correct_option": 0,
+    "explanation": "(x³)' = 3x², (3x)' = 3. Итог: 3x² − 3.",
+    "difficulty": 1
+  },
+  {
+    "subject": "math",
+    "topic": "Вероятность",
+    "exam_type": "ege",
+    "task_text": "В урне 3 белых и 7 чёрных шаров. Найдите вероятность достать белый шар.",
+    "options": ["0.3", "0.7", "0.21", "0.5"],
+    "correct_option": 0,
+    "explanation": "Всего 10 шаров, белых 3. P = 3/10 = 0.3.",
+    "difficulty": 1
+  },
+  {
+    "subject": "rus",
+    "topic": "Ударение",
+    "exam_type": "ege",
+    "task_text": "В каком слове ударение падает на второй слог?",
+    "options": ["звОнит", "каталОг", "дОкумент", "столЯр"],
+    "correct_option": 0,
+    "explanation": "Верно: звонИт — ударение на второй слог.",
+    "difficulty": 1
+  },
+  {
+    "subject": "rus",
+    "topic": "Орфография",
+    "exam_type": "ege",
+    "task_text": "В каком слове пишется НН?",
+    "options": ["ветреный", "кожаный", "соломенный", "оловяный"],
+    "correct_option": 2,
+    "explanation": "Соломенный — от «солома», суффикс -енн-.",
+    "difficulty": 2
+  },
+  {
+    "subject": "rus",
+    "topic": "Пунктуация",
+    "exam_type": "ege",
+    "task_text": "Сколько запятых нужно поставить: «Когда я вышел из дома начался дождь»?",
+    "options": ["0", "1", "2", "3"],
+    "correct_option": 1,
+    "explanation": "Одна запятая после придаточного: «Когда я вышел из дома, начался дождь».",
+    "difficulty": 1
+  },
+  {
+    "subject": "rus",
+    "topic": "Лексика",
+    "exam_type": "ege",
+    "task_text": "Укажите слово, которое не является синонимом к «красивый».",
+    "options": ["прекрасный", "великолепный", "ужасный", "живописный"],
+    "correct_option": 2,
+    "explanation": "«Ужасный» — антоним, остальные — синонимы.",
+    "difficulty": 1
+  }
+]
