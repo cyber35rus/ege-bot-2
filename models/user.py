@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from sqlalchemy import BigInteger, Date, DateTime, ForeignKey, Integer, String
+from sqlalchemy import BigInteger, Boolean, Date, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from .base import Base
 
@@ -19,6 +19,11 @@ class User(Base):
     daily_reset_at: Mapped[date] = mapped_column(Date, default=date.today)
 
     subscription_until: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    sub_notified_3d: Mapped[bool] = mapped_column(Boolean, default=False)
+    sub_notified_today: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    last_reminder_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
     referrer_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("users.id"), nullable=True
     )
