@@ -9,7 +9,8 @@ from sqlalchemy import select
 
 from config import settings
 from middlewares.db import DbUserMiddleware
-from services.db import SessionLocal, init_db
+from services.db import SessionLocal, init_db, migrate
+from services.notifications import _daily_loop
 
 from handlers import (
     admin, diagnostic, start, stats, subscribe, support, train,
@@ -17,7 +18,6 @@ from handlers import (
 
 
 async def auto_seed() -> None:
-    """Подгружает вопросы из всех data/*.json, добавляя только те, которых нет в БД."""
     import json
     from pathlib import Path
     from models import Question
@@ -69,8 +69,12 @@ async def main() -> None:
     dp.include_router(support.router)
 
     await init_db()
+    await migrate()
     await auto_seed()
     await bot.delete_webhook(drop_pending_updates=True)
+
+    asyncio.create_task(_daily_loop(bot))
+
     logging.info("Bot started")
     await dp.start_polling(bot)
 
