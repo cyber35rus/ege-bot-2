@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from sqlalchemy import func, select
+from sqlalchemy import select
 
 from config import settings
 from middlewares.db import DbUserMiddleware
@@ -17,29 +17,33 @@ from handlers import (
 
 
 async def auto_seed() -> None:
-    """Заливает вопросы из data/questions_sample.json, если таблица пустая."""
+    """Подгружает вопросы из data/*.json, добавляя только те, которых нет в БД."""
     import json
     from pathlib import Path
     from models import Question
 
+    paths = [
+        Path("data/questions_full.json"),
+        Path("data/questions_sample.json"),
+    ]
+    found = next((p for p in paths if p.exists()), None)
+    if not found:
+        logging.warning("No seed file found")
+        return
+
+    data = json.loads(found.read_text(encoding="utf-8"))
     async with SessionLocal() as session:
-        count = (await session.execute(
-            select(func.count()).select_from(Question)
-        )).scalar() or 0
-        if count > 0:
-            logging.info("Questions already in DB: %s", count)
-            return
-
-        path = Path("data/questions_sample.json")
-        if not path.exists():
-            logging.warning("Seed file not found: %s", path)
-            return
-
-        data = json.loads(path.read_text(encoding="utf-8"))
+        existing = set()
+        for row in (await session.execute(select(Question.task_text))).scalars().all():
+            existing.add(row)
+        added = 0
         for item in data:
+            if item["task_text"] in existing:
+                continue
             session.add(Question(**item))
+            added += 1
         await session.commit()
-        logging.info("Auto-seeded %s questions", len(data))
+        logging.info("Auto-seed: added %s new questions (file=%s)", added, found.name)
 
 
 async def main() -> None:
